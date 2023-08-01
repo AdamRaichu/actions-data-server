@@ -1,0 +1,9 @@
+on:
+  workflow_dispatch:
+  push:
+jobs:
+  server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: ngrok http --domain=secure-pipefish-seriously.ngrok-free.app 80
