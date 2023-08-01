@@ -6,4 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: ngrok http --domain=secure-pipefish-seriously.ngrok-free.app 80
+      - run: |        
+        npm i -g ngrok
+        ngrok config add-authtoken ${{secrets.NGROK_TOKEN}}
+        ngrok http --domain=secure-pipefish-seriously.ngrok-free.app 80
