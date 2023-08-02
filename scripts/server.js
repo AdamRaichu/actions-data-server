@@ -2,15 +2,48 @@ const ngrok = require("@ngrok/ngrok");
 const fs = require("fs");
 const http = require("http");
 
+const AUTHTOKEN = "";
+
+// const st = require("st");
+// const http = require("http");
+const express = require("express");
+
+module.exports = function (gip, g, p) {
+  init(gip, g, p);
+};
+
+//#region server setup
+const app = express();
+
+app.use((_req, res, next) => {
+  res.append("Access-Control-Allow-Origin", ["*"]);
+  res.append("Access-Control-Allow-Methods", "POST");
+  res.append("Access-Control-Allow-Headers", "Content-Type,X-Adamraichu-Data");
+  next();
+});
+
+app.post("/game-thread", (req, res) => {
+  res.send({});
+  // res.send(JSON.parse(req.headers["x-adamraichu-data"]));
+});
+
+const serverPort = 80;
+
+app.listen(serverPort, () => {
+  console.log(`Server running on port ${serverPort}`);
+});
+
+//#endregion
+
 // make webserver
-http
-  .createServer(function (req, res) {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.write("Congrats you have a created an ngrok web server");
-    res.end();
-  })
-  .listen(UNIX_SOCKET); // Server object listens on unix socket
-console.log("Node.js web server at", UNIX_SOCKET, "is running..");
+// http
+//   .createServer(function (req, res) {
+//     res.writeHead(200, { "Content-Type": "text/html" });
+//     res.write("Congrats you have a created an ngrok web server");
+//     res.end();
+//   })
+//   .listen(UNIX_SOCKET); // Server object listens on unix socket
+// console.log("Node.js web server at", UNIX_SOCKET, "is running..");
 
 // setup ngrok
 // import ngrok from '@ngrok/ngrok' // if inside a module
@@ -18,8 +51,8 @@ ngrok.consoleLog("INFO"); // turn on info logging
 
 builder = new ngrok.NgrokSessionBuilder();
 builder
-  // .authtoken("<authtoken>")
-  .authtokenFromEnv()
+  .authtoken(AUTHTOKEN)
+  // .authtokenFromEnv()
   .metadata("Online in One Line")
   .clientInfo("ngrok-http-full", "1.2.3")
   // .caCert(fs.readFileSync('ca.crt'))
